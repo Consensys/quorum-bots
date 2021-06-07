@@ -43,7 +43,7 @@ func GetConfig() *Config {
 			GethGithubAPIUrl: "https://api.github.com/repos/ethereum/go-ethereum",
 
 			QuorumGitRepo: "https://" + githubUsername + ":" + githubToken + "@github.com/Consensys/quorum.git",
-			QuorumAPIUrl:  "https://api.github.com/repos/" + githubUsername + "/quorum",
+			QuorumAPIUrl:  "https://api.github.com/repos/Consensys/quorum",
 
 			// For experimentation with the private Quorum repository
 			//QuorumGitRepo: "git@github.com:ConsenSysQuorum/quorum.git",
