@@ -84,7 +84,7 @@ func (api *HTTPGithub) CreateQuorumPullRequest(branchName string, data github.Re
 		Title: title,
 		Body:  prBody,
 		Base:  "master",
-		Head:  branchName,
+		Head:  "quorumbot:" + branchName, // created from QuorumBot fork
 		Draft: true,
 	}
 
