@@ -32,9 +32,7 @@ func CreateMarkdownHeader() string {
 
 	builder.WriteString("\n\n")
 
-	builder.WriteString("### Extra Changes & Tests\n\n")
-
-	builder.WriteString("- [ ] Example title: example description of change/test\n")
+	builder.WriteString("Add any extra changes/tests as comments on this PR.\n\n")
 
 	builder.WriteString("\n\n")
 
