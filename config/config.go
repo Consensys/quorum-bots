@@ -11,9 +11,9 @@ type Config struct {
 	GithubAPIUrl string
 	GithubLabel  string
 
-	QuorumGitRepo string
+	QuorumGitRepo    string
 	QuorumBotGitRepo string
-	QuorumAPIUrl  string
+	QuorumAPIUrl     string
 
 	GethGitRepo      string
 	GethGithubAPIUrl string
@@ -43,9 +43,9 @@ func GetConfig() *Config {
 			GethGitRepo:      "https://github.com/ethereum/go-ethereum.git",
 			GethGithubAPIUrl: "https://api.github.com/repos/ethereum/go-ethereum",
 
-			QuorumGitRepo: "https://" + githubUsername + ":" + githubToken + "@github.com/Consensys/quorum.git",
+			QuorumGitRepo:    "https://" + githubUsername + ":" + githubToken + "@github.com/Consensys/quorum.git",
 			QuorumBotGitRepo: "https://" + githubUsername + ":" + githubToken + "@github.com/quorumbot/quorum.git",
-			QuorumAPIUrl:  "https://api.github.com/repos/Consensys/quorum",
+			QuorumAPIUrl:     "https://api.github.com/repos/Consensys/quorum",
 
 			QuorumRepoFolder:      "tmp-quorum-repo",
 			QuorumVersionFilePath: "/params/version.go",
