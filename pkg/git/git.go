@@ -7,7 +7,6 @@ import (
 	"os/exec"
 	"regexp"
 	"strings"
-
 	"upgradebot/config"
 )
 
@@ -21,38 +20,14 @@ func NewGit(config *config.Config) *Git {
 
 // CloneQuorumRepository - clone the repository of Quorum locally and add the go-ethereum remote as `geth`
 func (s *Git) CloneQuorumRepository() {
-	cmd := exec.Command("git", "clone", s.config.QuorumGitRepo, s.config.QuorumRepoFolder)
-	out, err := cmd.Output()
-	if checkCmdError("git clone", cmd, out, err) {
-		return
+	err := exec.Command("git", "clone", s.config.QuorumGitRepo, s.config.QuorumRepoFolder).Run()
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// load geth tags
-	cmd = s.buildGitCommandOnRepo("remote", "add", "geth", s.config.GethGitRepo)
-	out, err = cmd.Output()
-	if checkCmdError("git remote add", cmd, out, err) {
-		return
-	}
-
-	cmd = s.buildGitCommandOnRepo("fetch", "geth", "--tags", "-f")
-	out, err = cmd.Output()
-	if checkCmdError("git fetch tags", cmd, out, err) {
-		return
-	}
-}
-
-func checkCmdError(reason string, cmd *exec.Cmd, out []byte, err error) bool {
-	if err == nil {
-		return false
-	}
-	log.Printf("env: %+v", cmd.Env)
-	switch err := err.(type) {
-	case *exec.ExitError:
-		log.Fatalf("%s: %s: %v\n%s\n%s", reason, cmd.String(), err, string(out), string(err.Stderr))
-	default:
-		log.Fatalf("%s: %s: %v\n%s", reason, cmd.String(), err, string(out))
-	}
-	return true
+	s.executeGitCommandOnRepo("remote", "add", "geth", s.config.GethGitRepo)
+	s.executeGitCommandOnRepo("fetch", "geth", "--tags")
 }
 
 // ClearQuorumRepository - delete the repository folder
@@ -62,16 +37,8 @@ func (s *Git) ClearQuorumRepository() {
 
 // CreateBranchFromGethTag - create a branch from a geth tag and push the branch to the remote quorum
 func (s *Git) CreateBranchFromGethTag(targetTag string, branchName string) {
-	cmd := s.buildGitCommandOnRepo("checkout", "tags/"+targetTag, "-b", branchName)
-	out, err := cmd.Output()
-	if checkCmdError("git checkout tags", cmd, out, err) {
-		return
-	}
-	cmd = s.buildGitCommandOnRepo("push", "-u", "origin", branchName)
-	out, err = cmd.Output()
-	if checkCmdError("git push", cmd, out, err) {
-		return
-	}
+	s.executeGitCommandOnRepo("checkout", "tags/"+targetTag, "-b", branchName)
+	s.executeGitCommandOnRepo("push", "-u", "origin", branchName)
 }
 
 /**
@@ -126,13 +93,8 @@ func (s *Git) GetChangedFilesAgainstGethBaseVersion(baseGethTag string) []string
 }
 
 func (s *Git) executeGitCommandOnRepo(arg ...string) ([]byte, error) {
-	cmd := s.buildGitCommandOnRepo(arg...)
-	log.Println(cmd.String())
-	return cmd.Output()
-}
-
-func (s *Git) buildGitCommandOnRepo(arg ...string) *exec.Cmd {
 	cmd := exec.Command("git", arg...)
 	cmd.Dir = s.config.QuorumRepoFolder
-	return cmd
+	log.Println(cmd.String())
+	return cmd.Output()
 }
