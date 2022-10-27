@@ -2,7 +2,6 @@ package http
 
 import (
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -49,7 +48,7 @@ func (adapter *HTTPClient) DoGet(url string) ([]byte, error) {
 
 func (adapter *HTTPClient) deserialize(resp *http.Response) ([]byte, error) {
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}

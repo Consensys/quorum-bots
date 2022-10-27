@@ -2,8 +2,8 @@ package git
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
 	"os/exec"
 	"regexp"
 	"strings"
@@ -44,7 +44,7 @@ func (s *Git) CreateBranchFromGethTag(targetTag string, branchName string) {
 	s.executeGitCommandOnRepo("push", "-u", "quorumbot", branchName)
 }
 
-/**
+/*
 GetBaseGethTag - Get current version of go-ethereum merged into Quorum
 
 params/version.go
@@ -53,13 +53,12 @@ VersionMajor = 1        // Major version component of the current release
 VersionMinor = 9        // Minor version component of the current release
 VersionPatch = 8        // Patch version component of the current release
 VersionMeta  = "stable" // Version metadata to append to the version string
-
 */
 func (s *Git) GetBaseGethTag() string {
 	matcherMajor, _ := regexp.Compile(`VersionMajor = (\d+)`)
 	matcherMinor, _ := regexp.Compile(`VersionMinor = (\d+)`)
 	matcherPatch, _ := regexp.Compile(`VersionPatch = (\d+)`)
-	out, err := ioutil.ReadFile(s.config.QuorumRepoFolder + s.config.QuorumVersionFilePath)
+	out, err := os.ReadFile(s.config.QuorumRepoFolder + s.config.QuorumVersionFilePath)
 	if err != nil {
 		log.Fatal("Error reading file "+s.config.QuorumVersionFilePath, err)
 	}

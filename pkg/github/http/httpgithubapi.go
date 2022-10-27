@@ -223,7 +223,7 @@ func (api *HTTPGithub) getCommitChanges(base string, target string) github.Commi
 func parseJson(body []byte, data interface{}) {
 	jsonErr := json.Unmarshal(body, data)
 	if jsonErr != nil {
-		log.Fatal(jsonErr)
+		log.Fatal(jsonErr, string(body))
 	}
 }
 
